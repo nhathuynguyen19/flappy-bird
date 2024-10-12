@@ -1,6 +1,8 @@
 import pygame, sys
 from module.bird import Bird
 from module.cloud import Cloud
+from module.line import Line
+from module.treebuilding import Tree_Building
 
 pygame.init()
 
@@ -15,34 +17,6 @@ pygame.display.set_caption('Flappy Bird')
 window_width = 320 + 160
 window_height = 480 + 240
 screen = pygame.display.set_mode((window_width, window_height))
-
-# class line
-class Line:
-    def __init__(self, scale):
-        # tao line
-        self.line = pygame.image.load('img/line.png')
-        self.line = pygame.transform.scale(self.line, (12 * scale, 11 * scale))
-        self.speed = 0
-
-    def draw(self, screen, i):
-        if i % 24 == 0:
-            self.speed += 0.1
-            if self.speed >= 478:
-                self.speed = 0
-            i -= self.speed
-            screen.blit(self.line, (i, window_height - window_height / 4))
-            screen.blit(self.line, (i + 478, window_height - window_height / 4))
-
-# class tree building
-class Tree_Building:
-    def __init__(self, scale):
-        # tree
-        self.img = pygame.image.load('img/tree_building.png')
-        self.img = pygame.transform.scale(self.img, (48 * scale, 33 * scale))
-
-    def draw(self, screen, i, scale):
-        if i % 96 == 0:
-            screen.blit(self.img, (i, window_height - window_height / 4 - 33 * scale))
 
 # khai bao doi tuong bird
 size_bird = 36
@@ -75,8 +49,8 @@ while True:
 
     for i in range(0, 480):
         cloud.draw(screen, i, 2, window_height)
-        line.draw(screen, i)
-        tree_building.draw(screen, i, 2)
+        line.draw(screen, i, window_height)
+        tree_building.draw(screen, i, 2, window_height)
 
     bird.frame_update(current_time)
     bird.draw(screen)
