@@ -3,6 +3,7 @@ from module.bird import Bird
 from module.cloud import Cloud
 from module.line import Line
 from module.treebuilding import Tree_Building
+from module.pipe import Pipe
 
 pygame.init()
 
@@ -14,11 +15,11 @@ pygame.display.set_icon(app_icon)
 pygame.display.set_caption('Flappy Bird')
 
 # tao do rong cua so
-window_width = 320 + 160
-window_height = 480 + 240
+window_width = 480
+window_height = 720
 screen = pygame.display.set_mode((window_width, window_height))
 
-# khai bao doi tuong 
+# khai bao doi tuong bird
 size_bird = 36
 brown = (223, 215, 150)
 sky = (113, 197, 207)
@@ -27,6 +28,7 @@ bird = Bird(size_bird, window_width / 2 - size_bird * 4, window_height / 2 - siz
 line = Line(2)
 tree_building = Tree_Building(2)
 cloud = Cloud(2)
+pipe = Pipe()
 # vong lap chinh
 while True:
     for event in pygame.event.get():
@@ -45,12 +47,17 @@ while True:
     bird.rotate()
 
     screen.fill(sky)
-    screen.fill(brown, dirt)
 
     for i in range(0, 480):
         cloud.draw(screen, i, 2, window_height)
-        line.draw(screen, i, window_height)
         tree_building.draw(screen, i, 2, window_height)
+        
+    pipe.draw(screen, window_width, window_height)
+
+    screen.fill(brown, dirt)
+    
+    for i in range(0, 480):
+        line.draw(screen, i, window_height)
 
     bird.frame_update(current_time)
     bird.draw(screen)
