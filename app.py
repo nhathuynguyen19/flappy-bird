@@ -24,11 +24,15 @@ size_bird = 36
 brown = (223, 215, 150)
 sky = (113, 197, 207)
 dirt = (0, window_height - window_height/4, window_width, window_height/4)
-bird = Bird(size_bird, window_width / 2 - size_bird * 4, window_height / 2 - size_bird * 4)
+bird = Bird(size_bird, (window_width - window_height / 4) / 2 - size_bird / 2, (window_height - window_height / 4) / 2 - size_bird / 2)
 line = Line(2)
 tree_building = Tree_Building(2)
 cloud = Cloud(2)
-pipe = Pipe()
+pipe1 = Pipe(window_width, window_height)
+pipe2 = Pipe(window_width, window_height)
+pipe3 = Pipe(window_width, window_height)
+countPip = 0
+PipLoop = 0
 # vong lap chinh
 while True:
     for event in pygame.event.get():
@@ -36,8 +40,8 @@ while True:
             pygame.quit()
             sys.exit()
         if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
-            bird.fall_speed = -8
-            bird.gravity = 0.5
+            bird.fall_speed = -9
+            bird.gravity = 0.7
             bird.angle = 45
             bird.rotate_begin = True
             bird.rotate_speed = 0
@@ -49,10 +53,38 @@ while True:
     screen.fill(sky)
 
     for i in range(0, 480):
-        cloud.draw(screen, i, 2, window_height)
+        cloud.draw(screen, i, 2, window_height) 
         tree_building.draw(screen, i, 2, window_height)
+
+    if (countPip == 0) :
+        PipLoop = 1
+    else:
+        PipLoop = 0
+    
+    if (PipLoop == 1):
+        pipe1.randomX()
+
+    pipe1.drawPipeBottom(screen)
+    pipe1.drawPipeTop(screen) 
+    pipe1.dropX()
+
+    if (PipLoop == 1):
+        pipe2.randomX()
+
+    if (countPip >= 542 / 3):
+        pipe2.drawPipeBottom(screen)
+        pipe2.drawPipeTop(screen)
+        pipe2.dropX()
+
+    if (PipLoop == 1):
+        pipe3.randomX()
+
+    if (countPip >= 542 / 3 * 2):
+        pipe3.drawPipeBottom(screen)
+        pipe3.drawPipeTop(screen)
+        pipe3.dropX()
         
-    pipe.draw(screen, window_width, window_height)
+    countPip += 2
 
     screen.fill(brown, dirt)
     

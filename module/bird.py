@@ -55,7 +55,7 @@ class Bird:
             self.shift_x = abs(x_rotate - x_new)
             self.shift_y = abs(y_rotate - y_new)
         if self.angle <= 45 and self.angle > -90 and self.rotate_begin == True:
-            self.rotate_speed += 0.12
+            self.rotate_speed += 0.2
             self.angle -= self.rotate_speed
         if self.angle < -90:
             self.angle = -90
