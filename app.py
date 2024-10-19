@@ -18,7 +18,7 @@ window_width = 320 + 160
 window_height = 480 + 240
 screen = pygame.display.set_mode((window_width, window_height))
 
-# khai bao doi tuong bird
+# khai bao doi tuong 
 size_bird = 36
 brown = (223, 215, 150)
 sky = (113, 197, 207)
