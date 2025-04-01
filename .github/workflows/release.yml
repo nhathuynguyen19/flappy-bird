@@ -7,49 +7,52 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Chạy trên môi trường Ubuntu
+    runs-on: ubuntu-latest
 
     env:
-      PROJECT_NAME: flappy-bird  # Tạo biến tên dự án
+      PROJECT_NAME: flappy-bird
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # Lấy mã nguồn từ GitHub
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Chọn phiên bản Python
+          python-version: '3.8'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install virtualenv
-          virtualenv venv  # Tạo môi trường ảo
-          source venv/bin/activate  # Kích hoạt môi trường ảo
-          pip install -r requirements.txt  # Cài đặt thư viện
+          virtualenv venv
+          source venv/bin/activate
+          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
+          deactivate  # Tắt môi trường ảo để đảm bảo venv ổn định
 
       - name: Verify environment
         run: |
           source venv/bin/activate
-          python -m pip list  # Liệt kê các package đã cài đặt
+          python -m pip list
+          deactivate
 
-      - name: Build the package
+      - name: Prepare release directory
         run: |
-          source venv/bin/activate  # Đảm bảo môi trường ảo đã được kích hoạt
-          mkdir -p /tmp  # Create a temporary directory
           mkdir -p /tmp/release
-          cp -r * /tmp/release  # Copy all files to the temporary directory
+          cp -r . /tmp/release/  # Sao chép toàn bộ thư mục gốc (bao gồm venv)
+          sync  # Đảm bảo sao chép hoàn tất
           cd /tmp/release
-          ls -la # Kiểm tra file trước khi nén
-          tar -czvf ${PROJECT_NAME}.tar.gz .
-          ls -la # Kiểm tra lại xem file tar.gz có được tạo không
- # Dùng biến tên dự án để tạo tên file release
+          ls -la  # Kiểm tra nội dung trước khi nén
+
+      - name: Create tarball
+        run: |
+          cd /tmp/release
+          tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .
+          ls -la  # Kiểm tra xem file tar.gz đã được tạo chưa
 
       - name: Upload Release Assets to GitHub
-        uses: softprops/action-gh-release@v1  # Upload các file release lên GitHub
+        uses: softprops/action-gh-release@v1
         with:
-          files: |
-            /tmp/release/${PROJECT_NAME}.tar.gz  # Upload bản release với tên dựa trên biến
+          files: /tmp/release/${PROJECT_NAME}.tar.gz
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub tự động tạo token khi sử dụng GitHub Actions
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
