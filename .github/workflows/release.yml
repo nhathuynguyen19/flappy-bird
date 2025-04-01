@@ -20,6 +20,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.8'
+          
+      - name: Install rsync
+        run: sudo apt-get install -y rsync
 
       - name: Install dependencies
         run: |
@@ -28,7 +31,7 @@ jobs:
           virtualenv venv
           source venv/bin/activate
           if [ -f "requirements.txt" ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
-          deactivate  # Tắt môi trường ảo để đảm bảo venv ổn định
+          deactivate 
 
       - name: Verify environment
         run: |
@@ -40,16 +43,17 @@ jobs:
         run: |
           mkdir -p /tmp
           mkdir -p /tmp/release
-          cp -a . /tmp/release/
+          rsync -av --exclude='tmp/release' ./ /tmp/release/
           sync  # Đảm bảo sao chép hoàn tất
+          sleep(2)
           cd /tmp/release
-          ls -la  # Kiểm tra nội dung trước khi nén
+          ls -la
 
       - name: Create tarball
         run: |
           cd /tmp/release
           tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .
-          ls -la  # Kiểm tra xem file tar.gz đã được tạo chưa
+          ls -la
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
