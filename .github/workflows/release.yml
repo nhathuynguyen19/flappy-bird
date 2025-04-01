@@ -37,9 +37,13 @@ jobs:
       - name: Build the package
         run: |
           source venv/bin/activate  # Đảm bảo môi trường ảo đã được kích hoạt
-          mkdir -p /tmp/release  # Create a temporary directory
-          cp -r * /tmp/release/  # Copy all files to the temporary directory
+          mkdir -p /tmp  # Create a temporary directory
+          cd /tmp
+          mkdir -p /release
+          cd ..
+          cp -r * /tmp/release  # Copy all files to the temporary directory
           cd /tmp/release
+          ls -la # Kiểm tra file trước khi nén
           tar --exclude='./.git' --warning=no-file-changed -czvf ${PROJECT_NAME}.tar.gz .
  # Dùng biến tên dự án để tạo tên file release
 
