@@ -23,7 +23,7 @@ jobs:
           
       - name: Create tarball
         run: |
-          tar -czvf ${PROJECT_NAME}-linux.tar.gz . --ignore-failed-read
+          tar -czvf ${PROJECT_NAME}-linux-macos.tar.gz . --ignore-failed-read
           ls -la ${PROJECT_NAME}-linux.tar.gz
 
       - name: Upload Release Assets to GitHub
@@ -57,32 +57,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: "*.zip"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-mac:
-    runs-on: macos-latest
-
-    env:
-      PROJECT_NAME: flappy-bird
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8'
-
-      - name: Create tarball
-        run: |
-          tar -czvf ${PROJECT_NAME}-macos.tar.gz . --ignore-failed-read
-          ls -la ${PROJECT_NAME}-macos.tar.gz
-
-      - name: Upload Release Assets to GitHub
-        uses: softprops/action-gh-release@v1
-        with:
-          files: "*.tar.gz"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
