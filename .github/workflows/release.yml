@@ -3,7 +3,7 @@ name: Python Package Release
 on:
   push:
     tags:
-      - 'v*'  # Kích hoạt workflow khi có tag bắt đầu bằng "v"
+      - 'v*'
 
 jobs:
   build:
@@ -44,8 +44,8 @@ jobs:
           mkdir -p /tmp
           mkdir -p /tmp/release
           rsync -av --exclude='tmp/release' ./ /tmp/release/
-          sync  # Đảm bảo sao chép hoàn tất
-          sleep(2)
+          sync
+          sleep 2
           cd /tmp/release
           ls -la
 
