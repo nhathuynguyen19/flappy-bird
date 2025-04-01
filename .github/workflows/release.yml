@@ -3,7 +3,7 @@ name: Python Package Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'v*'  # Kích hoạt workflow khi có tag bắt đầu bằng "v"
 
 jobs:
   build:
@@ -28,7 +28,7 @@ jobs:
           virtualenv venv
           source venv/bin/activate
           if [ -f "requirements.txt" ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
-          deactivate  # Đảm bảo venv hoàn tất trước khi tiếp tục
+          deactivate  # Tắt môi trường ảo để đảm bảo venv ổn định
 
       - name: Verify environment
         run: |
@@ -40,8 +40,7 @@ jobs:
         run: |
           mkdir -p /tmp/release
           cp -r . /tmp/release/  # Sao chép toàn bộ thư mục gốc (bao gồm venv)
-          sync  # Đợi tất cả hoạt động ghi file hoàn tất
-          sleep 2  # Thêm thời gian chờ để đảm bảo ổn định
+          sync  # Đảm bảo sao chép hoàn tất
           cd /tmp/release
           ls -la  # Kiểm tra nội dung trước khi nén
 
@@ -52,12 +51,6 @@ jobs:
           ls -la  # Kiểm tra xem file tar.gz đã được tạo chưa
 
       - name: Upload Release Assets to GitHub
-        uses: actions/upload-artifact@v3
-        with:
-          name: release-files
-          path: /tmp/release/${PROJECT_NAME}.tar.gz
-
-      - name: Upload Release Assets to GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           files: /tmp/release/${PROJECT_NAME}.tar.gz
