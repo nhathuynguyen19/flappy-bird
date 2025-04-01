@@ -38,9 +38,7 @@ jobs:
         run: |
           source venv/bin/activate  # Đảm bảo môi trường ảo đã được kích hoạt
           mkdir -p /tmp  # Create a temporary directory
-          cd /tmp
-          mkdir -p /release
-          cd ..
+          mkdir -p /tmp/release
           cp -r * /tmp/release  # Copy all files to the temporary directory
           cd /tmp/release
           ls -la # Kiểm tra file trước khi nén
