@@ -48,6 +48,6 @@ jobs:
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: ${PROJECT_NAME}.tar.gz
+          files: "*.tar.gz"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
