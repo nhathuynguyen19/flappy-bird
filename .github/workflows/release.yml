@@ -3,7 +3,7 @@ name: Python Package Release
 on:
   push:
     tags:
-      - 'v*'  # Trigger workflow khi có tag bắt đầu bằng "v"
+      - 'v*'  # Kích hoạt workflow khi có tag bắt đầu bằng "v"
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.8'  # Chọn phiên bản Python cần sử dụng
+          python-version: '3.8'  # Chọn phiên bản Python
 
       - name: Install dependencies
         run: |
@@ -29,10 +29,14 @@ jobs:
           source venv/bin/activate  # Kích hoạt môi trường ảo
           pip install -r requirements.txt  # Cài đặt thư viện
 
+      - name: Verify environment
+        run: |
+          source venv/bin/activate
+          python -m pip list  # Liệt kê các package đã cài đặt
+
       - name: Build the package
         run: |
-          # Đảm bảo rằng môi trường ảo đã được kích hoạt
-          source venv/bin/activate  # Kích hoạt lại môi trường ảo nếu cần
+          source venv/bin/activate  # Đảm bảo môi trường ảo đã được kích hoạt
           tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .  # Dùng biến tên dự án để tạo tên file release
 
       - name: Upload Release Assets to GitHub
