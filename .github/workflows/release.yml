@@ -1,0 +1,35 @@
+name: Python Package Release
+
+on:
+  push:
+    tags:
+      - 'v*'  # Trigger workflow khi có tag bắt đầu bằng "v"
+
+jobs:
+  build:
+    runs-on: linux-arch  # Chạy trên môi trường archlinux
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2  # Lấy mã nguồn từ GitHub
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Chọn phiên bản Python cần sử dụng
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine  # Cài đặt các công cụ build
+
+      - name: Build the package
+        run: python setup.py sdist bdist_wheel  # Build gói Python
+
+      - name: Upload Release Assets to GitHub
+        uses: softprops/action-gh-release@v1  # Upload các file release lên GitHub
+        with:
+          files: |
+            dist/*  # Tải lên tất cả các file trong thư mục dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub tự động tạo token khi sử dụng GitHub Actions
