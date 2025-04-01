@@ -36,7 +36,6 @@ jobs:
           
       - name: Create tarball
         run: |
-          cd /tmp/release
           tar -czvf ${PROJECT_NAME}.tar.gz . --ignore-failed-read
           ls -la ${PROJECT_NAME}.tar.gz
 
