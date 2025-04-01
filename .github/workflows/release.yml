@@ -37,12 +37,15 @@ jobs:
       - name: Build the package
         run: |
           source venv/bin/activate  # Đảm bảo môi trường ảo đã được kích hoạt
+          mkdir -p /tmp/release  # Create a temporary directory
+          cp -r * /tmp/release/  # Copy all files to the temporary directory
+          cd /tmp/release
           tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .  # Dùng biến tên dự án để tạo tên file release
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1  # Upload các file release lên GitHub
         with:
           files: |
-            ${PROJECT_NAME}.tar.gz  # Upload bản release với tên dựa trên biến
+            /tmp/release/${PROJECT_NAME}.tar.gz  # Upload bản release với tên dựa trên biến
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub tự động tạo token khi sử dụng GitHub Actions
