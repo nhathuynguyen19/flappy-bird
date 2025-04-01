@@ -34,21 +34,15 @@ jobs:
           source venv/bin/activate
           python -m pip list
           
-      - name: Prepare release directory
-        run: |
-          mkdir -p /tmp/release
-          rsync -av --exclude='.git' --exclude='.github' --exclude='venv' . /tmp/release/
-          ls -la /tmp/release
-
       - name: Create tarball
         run: |
           cd /tmp/release
-          tar -czvf ${PROJECT_NAME}.tar.gz .
+          tar -czvf ${PROJECT_NAME}.tar.gz . --ignore-failed-read
           ls -la ${PROJECT_NAME}.tar.gz
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/release/${PROJECT_NAME}.tar.gz
+          files: ${PROJECT_NAME}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
