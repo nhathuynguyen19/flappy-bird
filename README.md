@@ -1,8 +1,9 @@
 # flappy bird
 
+- Download release, extract, open cmd in project and run:
+
 ```sh
-python -m venv venv
 source venv/bin/activate  # (Linux/macOS)
 venv\Scripts\activate     # (Windows)
-python main.py
+python app.py
 ```
