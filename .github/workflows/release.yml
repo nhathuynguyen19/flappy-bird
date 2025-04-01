@@ -42,7 +42,8 @@ jobs:
           cp -r * /tmp/release  # Copy all files to the temporary directory
           cd /tmp/release
           ls -la # Kiểm tra file trước khi nén
-          tar --exclude='./.git' --warning=no-file-changed -czvf ${PROJECT_NAME}.tar.gz .
+          tar -czvf ${PROJECT_NAME}.tar.gz .
+          ls -la # Kiểm tra lại xem file tar.gz có được tạo không
  # Dùng biến tên dự án để tạo tên file release
 
       - name: Upload Release Assets to GitHub
