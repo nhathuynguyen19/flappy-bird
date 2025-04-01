@@ -24,12 +24,12 @@ jobs:
       - name: Create tarball
         run: |
           tar -czvf ${PROJECT_NAME}-linux-macos.tar.gz . --ignore-failed-read
-          ls -la ${PROJECT_NAME}-linux.tar.gz
+          ls -la ${PROJECT_NAME}-linux-macos.tar.gz
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: "*.tar.gz"
+          files: "${{ env.PROJECT_NAME }}-linux-macos.tar.gz"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,6 +56,6 @@ jobs:
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: "*.zip"
+          files: "${{ env.PROJECT_NAME }}-windows.zip"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
