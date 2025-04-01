@@ -31,13 +31,11 @@ jobs:
           virtualenv venv
           source venv/bin/activate
           if [ -f "requirements.txt" ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
-          deactivate 
 
       - name: Verify environment
         run: |
           source venv/bin/activate
           python -m pip list
-          deactivate
 
       - name: Prepare release directory
         run: |
