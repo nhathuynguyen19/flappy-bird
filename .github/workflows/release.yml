@@ -7,7 +7,10 @@ on:
 
 jobs:
   build:
-    runs-on: linux-arch  # Chạy trên môi trường archlinux
+    runs-on: ubuntu-latest  # Chạy trên môi trường Ubuntu
+
+    env:
+      PROJECT_NAME: flappy-bird  # Tạo biến tên dự án
 
     steps:
       - name: Checkout code
@@ -21,15 +24,21 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install setuptools wheel twine  # Cài đặt các công cụ build
+          pip install virtualenv
+          virtualenv venv  # Tạo môi trường ảo
+          source venv/bin/activate  # Kích hoạt môi trường ảo
+          pip install -r requirements.txt  # Cài đặt thư viện
 
       - name: Build the package
-        run: python setup.py sdist bdist_wheel  # Build gói Python
+        run: |
+          # Đảm bảo rằng môi trường ảo đã được kích hoạt
+          source venv/bin/activate  # Kích hoạt lại môi trường ảo nếu cần
+          tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .  # Dùng biến tên dự án để tạo tên file release
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1  # Upload các file release lên GitHub
         with:
           files: |
-            dist/*  # Tải lên tất cả các file trong thư mục dist
+            ${PROJECT_NAME}.tar.gz  # Upload bản release với tên dựa trên biến
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub tự động tạo token khi sử dụng GitHub Actions
