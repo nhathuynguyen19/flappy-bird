@@ -38,8 +38,9 @@ jobs:
 
       - name: Prepare release directory
         run: |
+          mkdir -p /tmp
           mkdir -p /tmp/release
-          cp -r . /tmp/release/  # Sao chép toàn bộ thư mục gốc (bao gồm venv)
+          cp -a . /tmp/release/
           sync  # Đảm bảo sao chép hoàn tất
           cd /tmp/release
           ls -la  # Kiểm tra nội dung trước khi nén
