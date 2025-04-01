@@ -39,6 +39,12 @@ jobs:
           tar -czvf ${PROJECT_NAME}.tar.gz . --ignore-failed-read
           ls -la ${PROJECT_NAME}.tar.gz
 
+      - name: Debug PROJECT_NAME
+        run: echo "PROJECT_NAME=${PROJECT_NAME}"
+
+      - name: Check environment variables
+        run: env
+
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
