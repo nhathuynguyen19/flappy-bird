@@ -14,45 +14,34 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.8'
 
       - name: Install dependencies
         run: |
+          set -e
           python -m pip install --upgrade pip
-          pip install virtualenv
-          virtualenv venv
+          python -m venv venv
           source venv/bin/activate
-          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; else echo "No requirements.txt found"; fi
+          if [ -f "requirements.txt" ]; then pip install -r requirements.txt; fi
 
       - name: Verify environment
         run: |
           source venv/bin/activate
           python -m pip list
 
-      - name: Prepare release directory
-        run: |
-          mkdir -p /tmp
-          mkdir -p /tmp/release
-          cp -r ./* /tmp/release
-          sync
-          sleep 5
-          cd /tmp/release
-          ls -la
-
       - name: Create tarball
         run: |
-          cd /tmp/release
-          tar --exclude='./.git' -czvf ${PROJECT_NAME}.tar.gz .
-          ls -la
+          tar --exclude='./.git' --exclude='./.github' --exclude='./venv' -czvf ${PROJECT_NAME}.tar.gz .
+          ls -la ${PROJECT_NAME}.tar.gz
 
       - name: Upload Release Assets to GitHub
         uses: softprops/action-gh-release@v1
         with:
-          files: /tmp/release/${PROJECT_NAME}.tar.gz
+          files: ${PROJECT_NAME}.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
