@@ -55,3 +55,6 @@ docker-compose.override.yml
 # System files
 .DS_Store
 Thumbs.db
+
+# More
+tempCodeRunnerFile.py
