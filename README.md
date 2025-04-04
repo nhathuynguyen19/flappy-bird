@@ -1,6 +1,6 @@
 # flappy bird
 
-- Download [Git](https://git-scm.com/downloads/win) (if not installed), install and follow this step.
+- Download [Git](https://git-scm.com/downloads/win), install (if not installed) and follow this step.
 
 ## Linux (Arch), macOS
 
